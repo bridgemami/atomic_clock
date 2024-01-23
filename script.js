@@ -12,9 +12,20 @@ mainEl.append(timeEl)
 
 function getDate () {
     const date = new Date()
-    const seconds = date.getSeconds()
-    // timeEl.innerHTML= `<p>${seconds}</p>`
-    timeEl.textContent= seconds
+    const hour = date.getHours()
+    const minute= date.getMinutes()
+    const second = date.getSeconds()
+    timeEl.innerHTML= `<h2>${hour} : ${singleDigits(minute)} : ${singleDigits(second)}</h2>`
+}
+
+function singleDigits (time) {
+    if( time <10) {
+        console.log(time.toString().padStart(2, '0'))
+       return time.toString().padStart(2, '0')
+    }
+    else {
+        return time
+    }
 }
 
 setInterval(getDate, 1000)
