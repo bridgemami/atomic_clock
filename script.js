@@ -1,3 +1,4 @@
+'use strict';
 const bodyEl = document.body;
 const headerEl = document.createElement("header")
 headerEl.innerHTML=`<h1>Atomic Clock</h1>`
@@ -11,6 +12,9 @@ mainEl.appendChild(timeEl)
 
 const dateEl = document.createElement("section")
 mainEl.appendChild(dateEl)
+
+const weatherEl = document.createElement("section")
+mainEl.appendChild(weatherEl)
 
 
 function getTime () {
@@ -42,19 +46,24 @@ function getDate() {
     `
 }
 
-async function weatherAPI (lat,long) {
-    fetch(`https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${long}&exlude=minuetly,hourly,daily,alerts&appid=84e09a6592aa0b5f4c53d668e13e6f4d`)
-      .then(response => {
+async function weatherAPI (lat,lon) {
+  fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=standard&appid=84e09a6592aa0b5f4c53d668e13e6f4d`)
+ 
+  .then(response => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        
         // Parse the JSON in the response
-        return  awaitresponse.json();
+        return response.json();
       })
       .then(data => {
         // Process the data from the API
-        console.log(data);
+        console.log(data)
+        const icon = data.weather.map(a => a.icon).join(' ');
+        console.log(icon)
+        weatherEl.innerHTML = `<h2>The weather in ${data.name}:</h2>
+        <img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="icon of " />
+        `
       })
       .catch(error => {
         // Handle errors
@@ -66,12 +75,10 @@ async function weatherAPI (lat,long) {
 function geolocationSupported() {
   if (navigator.geolocation) {
     console.log("Geolocation is supported by this browser :)");
-    getCurrentLocation();
   } else {
     console.log("Geolocation is NOT supported by this browser :(");
   }
 }
-geolocationSupported();
 
 function getCurrentLocation() {
   navigator.geolocation.getCurrentPosition((result) => {
