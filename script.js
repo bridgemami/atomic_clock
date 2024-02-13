@@ -47,28 +47,30 @@ function getDate() {
 }
 
 async function weatherAPI (lat,lon) {
-  fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=standard&appid=84e09a6592aa0b5f4c53d668e13e6f4d`)
- 
-  .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+  try {
+  const resp = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=84e09a6592aa0b5f4c53d668e13e6f4d`)
+        if (!resp.ok) {
+          throw new Error(`HTTP error! Status: ${resp.status}`);
         }
         // Parse the JSON in the response
-        return response.json();
-      })
-      .then(data => {
-        // Process the data from the API
+        const data = await resp.json()
         console.log(data)
         const icon = data.weather.map(a => a.icon).join(' ');
         console.log(icon)
+        const currentTemp = data.main.temp.toFixed(0)
+        console.log(currentTemp)
         weatherEl.innerHTML = `<h2>The weather in ${data.name}:</h2>
         <img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="icon of " />
+        <p>${data.weather[0].main}</p>
+        <p>Current temperature: ${currentTemp}&deg;F</p>
+        
         `
-      })
-      .catch(error => {
+
+  }
+      catch (error) {
         // Handle errors
         console.error('Fetch error:', error);
-      });
+      }
     
 }
 
@@ -80,8 +82,8 @@ function geolocationSupported() {
   }
 }
 
-function getCurrentLocation() {
-  navigator.geolocation.getCurrentPosition((result) => {
+async function getCurrentLocation() {
+ await navigator.geolocation.getCurrentPosition((result) => {
     let latitude = result.coords.latitude; // latitude value
    let longitude = result.coords.longitude; // longitude value
    weatherAPI(latitude, longitude)
