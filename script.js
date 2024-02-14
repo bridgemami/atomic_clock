@@ -5,9 +5,11 @@ headerEl.innerHTML=`<h1>Atomic Clock</h1>`
 bodyEl.append(headerEl)
 
 const mainEl = document.createElement("main")
+mainEl.classList.add("container")
 bodyEl.appendChild(mainEl)
 
 const timeEl = document.createElement("section")
+timeEl.classList.add("time")
 mainEl.appendChild(timeEl)
 
 const dateEl = document.createElement("section")
@@ -60,7 +62,7 @@ async function weatherAPI (lat,lon) {
         const currentTemp = data.main.temp.toFixed(0)
         console.log(currentTemp)
         weatherEl.innerHTML = `<h2>The weather in ${data.name}:</h2>
-        <img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="icon of " />
+        <img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="${data.weather[0].description} icon" />
         <p>${data.weather[0].main}</p>
         <p>Current temperature: ${currentTemp}&deg;F</p>
         

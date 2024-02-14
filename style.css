@@ -1,3 +1,23 @@
-main {
+.container {
     border: black solid 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.time {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    font-size: 2rem;
+}
+
+@media (min-width : 768px) {
+    body{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .container{
+        width: 75%;
+    }
 }
